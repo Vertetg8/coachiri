@@ -13,6 +13,7 @@ export type PersonalInfo = {
   activity_level: ActivityLevel;
   weight_goal?: WeightGoal;
   target_weight_loss?: number;
+  target_weight_gain?: number;
   bmi?: number;
   daily_calories?: number;
   protein_macro?: number;
@@ -44,11 +45,13 @@ export type MealPlan = {
   dinner: string;
   snacks: string;
   portions_multiplier: number;
+  goal_type: WeightGoal;
+  flexibility_range: number;
 };
 
 export type ActivityLevel = 'sedentary' | 'light' | 'moderate' | 'active' | 'very_active';
 
-export type WeightGoal = 'lose_weight';
+export type WeightGoal = 'maintain_weight' | 'lose_weight' | 'gain_weight';
 
 export type AuthContextType = {
   user: User | null;

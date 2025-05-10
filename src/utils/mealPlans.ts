@@ -1,4 +1,5 @@
 export const mealPlans = [
+  // Maintenance Plans
   {
     plan_id: 'c47b4ef6-3567-4495-8d11-261c4a7c5417',
     calorie_range_min: 1200,
@@ -8,6 +9,8 @@ export const mealPlans = [
     dinner: 'Baked salmon (100g), steamed broccoli, and ½ cup brown rice',
     snacks: '1 boiled egg + ½ apple, Carrot sticks with 1 tbsp hummus',
     portions_multiplier: 1,
+    goal_type: 'maintain_weight',
+    flexibility_range: 100,
   },
   {
     plan_id: '9f5a9b2c-0123-4456-7890-abcdef123456',
@@ -18,36 +21,34 @@ export const mealPlans = [
     dinner: 'Stir-fried tofu, vegetables, 1 cup quinoa',
     snacks: 'Low-fat cottage cheese + peach, Protein shake with water',
     portions_multiplier: 1,
+    goal_type: 'maintain_weight',
+    flexibility_range: 100,
   },
+  // Weight Loss Plans
   {
     plan_id: 'e8d7c6b5-a432-1098-7654-321fedcba987',
-    calorie_range_min: 1800,
-    calorie_range_max: 2000,
-    breakfast: '2 scrambled eggs, whole grain toast, orange',
-    lunch: 'Grilled chicken sandwich, sweet potato wedges',
-    dinner: 'Beef stir-fry with rice and vegetables',
-    snacks: 'Trail mix (30g), Greek yogurt + chia seeds',
+    calorie_range_min: 1300,
+    calorie_range_max: 1500,
+    breakfast: '2 egg whites + 1 whole egg, whole grain toast',
+    lunch: 'Lean chicken breast, mixed greens salad',
+    dinner: 'White fish, roasted vegetables',
+    snacks: 'Greek yogurt, apple slices',
     portions_multiplier: 1,
+    goal_type: 'lose_weight',
+    flexibility_range: 100,
   },
+  // Weight Gain Plans
   {
     plan_id: 'b1a2c3d4-e5f6-7890-1234-567890abcdef',
-    calorie_range_min: 2200,
-    calorie_range_max: 2500,
-    breakfast: '3 eggs, oatmeal with honey and banana',
-    lunch: 'Chicken breast, pasta, olive oil, side salad',
-    dinner: 'Grilled salmon, couscous, roasted veggies',
-    snacks: 'Peanut butter on toast + milk, Protein smoothie with fruit and oats',
+    calorie_range_min: 2500,
+    calorie_range_max: 2800,
+    breakfast: '3 whole eggs, oatmeal with nuts and banana, whole milk',
+    lunch: 'Chicken breast, brown rice, avocado, olive oil',
+    dinner: 'Lean beef, sweet potato, mixed vegetables',
+    snacks: 'Protein shake with oats and peanut butter, Trail mix',
     portions_multiplier: 1,
-  },
-  {
-    plan_id: 'd4c3b2a1-9876-5432-1098-765432109876',
-    calorie_range_min: 2700,
-    calorie_range_max: 3000,
-    breakfast: 'Omelet with 4 eggs, cheese, toast, fruit juice',
-    lunch: 'Steak wrap, rice, avocado, fruit',
-    dinner: 'Chicken, sweet potatoes, mixed vegetables, olive oil drizzle',
-    snacks: 'Granola bar + protein shake, Nuts, yogurt, banana',
-    portions_multiplier: 1,
+    goal_type: 'gain_weight',
+    flexibility_range: 100,
   },
 ];
 
@@ -60,7 +61,6 @@ export const initializeMealPlans = async (supabase: any) => {
       return;
     }
     
-    // If no meal plans exist, insert the default ones
     if (!data || data.length === 0) {
       const { error: insertError } = await supabase.from('meal_plans').insert(mealPlans);
       
