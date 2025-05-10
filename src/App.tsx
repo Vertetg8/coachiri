@@ -27,21 +27,7 @@ const App: React.FC = () => {
   
   useEffect(() => {
     const setupDatabase = async () => {
-      // Initialize meal plans
       await initializeMealPlans(supabase);
-      
-      // Initialize admin account if it doesn't exist
-      const { data: adminData } = await supabase
-        .from('admin_credentials')
-        .select('*')
-        .eq('email', 'avdulajirakli@gmail.com');
-        
-      if (!adminData || adminData.length === 0) {
-        await supabase.from('admin_credentials').insert({
-          email: 'avdulajirakli@gmail.com',
-          password: 'Irakli123@', // In a real app, use proper password hashing
-        });
-      }
     };
     
     setupDatabase();

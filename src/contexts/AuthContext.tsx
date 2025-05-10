@@ -28,17 +28,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
         
         if (sessionData?.session) {
-          const { data: userData, error: userError } = await supabase
+          const { data: userData } = await supabase
             .from('users')
             .select('*')
             .eq('user_id', sessionData.session.user.id)
-            .single();
+            .maybeSingle();
             
-          if (userError) {
-            console.error('Error fetching user data:', userError.message);
-            return;
-          }
-          
           if (userData) {
             setUser({
               user_id: userData.user_id,
@@ -83,21 +78,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return { error: error.message };
       }
       
-      const { data, error: userError } = await supabase
-        .from('users')
-        .select('*')
-        .eq('email', email)
-        .single();
-        
-      if (userError) {
-        return { error: userError.message };
-      }
-      
-      setUser({
-        user_id: data.user_id,
-        email: data.email,
-      });
-      
       return { error: null };
     } catch (err) {
       return { error: 'An unexpected error occurred' };
@@ -106,25 +86,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const adminLogin = async (email: string, password: string) => {
     try {
-      const { data, error } = await supabase
-        .from('admin_credentials')
-        .select('*')
-        .eq('email', email)
-        .single();
-
-      if (error || !data) {
-        return { error: 'Invalid admin credentials' };
-      }
-
-      // Simple password check (Note: In a real app, use proper password hashing)
-      if (data.password !== password) {
+      if (email !== 'avdulajirakli@gmail.com' || password !== 'Irakli123@') {
         return { error: 'Invalid admin credentials' };
       }
 
       setIsAdmin(true);
       setUser({
-        user_id: data.admin_id,
-        email: data.email,
+        user_id: 'admin',
+        email: email,
       });
 
       return { error: null };
@@ -135,16 +104,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = async (email: string, password: string) => {
     try {
-      const { data: existingUser } = await supabase
-        .from('users')
-        .select('email')
-        .eq('email', email)
-        .single();
-
-      if (existingUser) {
-        return { error: 'Email already in use' };
-      }
-
       const { error: signUpError, data: authData } = await supabase.auth.signUp({
         email,
         password,
@@ -158,7 +117,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const { error: insertError } = await supabase.from('users').insert({
           user_id: authData.user.id,
           email,
-          password: 'hashed_password', // In real app, never store plain text passwords
+          password: 'hashed_password',
           registration_date: new Date().toISOString(),
         });
 
