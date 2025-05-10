@@ -21,6 +21,7 @@ type PersonalInfoFormData = {
   activity_level: ActivityLevel;
   weight_goal?: WeightGoal;
   target_weight_loss?: number;
+  target_weight_gain?: number;
 };
 
 const PersonalInfoForm: React.FC = () => {
@@ -67,6 +68,7 @@ const PersonalInfoForm: React.FC = () => {
             activity_level: data.activity_level,
             weight_goal: data.weight_goal,
             target_weight_loss: data.target_weight_loss,
+            target_weight_gain: data.target_weight_gain,
           });
         }
       } catch (error) {
@@ -98,6 +100,7 @@ const PersonalInfoForm: React.FC = () => {
         activity_level: data.activity_level,
         weight_goal: data.weight_goal,
         target_weight_loss: data.target_weight_loss,
+        target_weight_gain: data.target_weight_gain,
         ...metrics,
       };
       
@@ -270,8 +273,9 @@ const PersonalInfoForm: React.FC = () => {
                 className="input"
                 {...register('weight_goal')}
               >
-                <option value="">Maintain current weight</option>
+                <option value="maintain_weight">Maintain current weight</option>
                 <option value="lose_weight">Lose weight</option>
+                <option value="gain_weight">Gain weight</option>
               </select>
             </div>
             
@@ -288,12 +292,35 @@ const PersonalInfoForm: React.FC = () => {
                   placeholder="e.g., 0.5"
                   {...register('target_weight_loss', { 
                     required: 'Target weight loss is required',
-                    min: { value: 0.5, message: 'Minimum is 0.5 kg per week' },
+                    min: { value: 0.1, message: 'Minimum is 0.1 kg per week' },
                     max: { value: 1.2, message: 'Maximum is 1.2 kg per week' },
                   })}
                 />
                 {errors.target_weight_loss && (
                   <p className="mt-1 text-sm text-error-500">{errors.target_weight_loss.message}</p>
+                )}
+              </div>
+            )}
+            
+            {weightGoal === 'gain_weight' && (
+              <div className="form-control">
+                <label htmlFor="target_weight_gain" className="label">
+                  Target Weekly Weight Gain (kg)
+                </label>
+                <input
+                  id="target_weight_gain"
+                  type="number"
+                  step="0.1"
+                  className={`input ${errors.target_weight_gain ? 'input-error' : ''}`}
+                  placeholder="e.g., 0.5"
+                  {...register('target_weight_gain', { 
+                    required: 'Target weight gain is required',
+                    min: { value: 0.1, message: 'Minimum is 0.1 kg per week' },
+                    max: { value: 1.2, message: 'Maximum is 1.2 kg per week' },
+                  })}
+                />
+                {errors.target_weight_gain && (
+                  <p className="mt-1 text-sm text-error-500">{errors.target_weight_gain.message}</p>
                 )}
               </div>
             )}
